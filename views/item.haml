@@ -1,0 +1,28 @@
+:javascript
+  function delete_doc() {
+      console.debug('click');
+      res = $.ajax(document.url, {
+          'type': 'delete',
+          'data': {'rev': $('#revision').val()}
+      })
+      .done(function () {
+          document.location.href = $('#redirect').val()
+      })
+      .fail(function() {
+          alert('Failed to delete, sorry');
+      })
+
+   }
+
+%h1="Name: " + item.delete('name')
+%ul
+  - item.each do |key, value|
+    -if key[0] != '_'
+      %li= "<span class='key'>#{ capitolise key }:</span> #{value}"
+
+%input{:type => "submit", :onclick => "delete_doc();", :value => "Delete"}
+%input{:type => "hidden", :id => "revision", :value => item['_rev']}
+%input{:type => "hidden", :id => "redirect", :value => category_loc(item)}
+
+%form{:action => "/item/#{ item['_id'] }/edit"}
+  %input{:type => "submit", :value => "Edit"}

@@ -1,0 +1,6 @@
+- if items.length > 0
+  %ul.items
+    -items.each_index do |i|
+      %li{:class => if i.even? then 'even' else 'odd' end}=item_link items[i]
+- else
+  %p sorry, no items found

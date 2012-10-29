@@ -1,0 +1,113 @@
+%script{:type => 'application/javascript'}="categories = " + category_list
+%script{:type => 'application/javascript'}="fields = " + field_list
+:javascript
+  $(function() {
+
+      add_submit_listener($('input'));
+      bind_next_row($('input.value:last')); 
+      setup_completion($('#category'), function() { 
+        return Object.keys(categories);
+      });
+  });
+
+  function bind_next_row(elements) {
+      elements.bind('keydown.addRow', function (evnt) {
+          if (evnt.keyCode == 9) { // Tab
+              elements.unbind('keydown.addRow');
+              add_row();
+              return false;
+          }
+      });
+  }
+
+  function submit_form() {
+      $('#fields li.new').each(function(idx, elem) {
+          var key = $(elem).children('.key'); 
+          var value = $(elem).children('.value'); 
+          if (key.val() && value.val()) {
+          value.attr('name', key.val());
+          }
+      });
+      $('#addform').submit();
+  }
+
+  
+  function add_submit_listener(elements) {
+      elements.bind('keyup.submitForm', function(evnt) {
+          if (evnt.keyCode == 13) { // return
+            submit_form();
+          }
+      });
+  }
+
+  function setup_completion(element, prediction_list_callback) {
+      element.bind('keyup.complete', function(evnt) {
+          if (evnt.shiftKey || evnt.ctrlKey
+              || evnt.keyCode == 46 // Delete
+              || evnt.keyCode == 9 // Tab
+              || evnt.keycode == 8) { // Backspace
+              return;
+          }
+          var value = element.val();
+          if (value) {
+              var prediction_list = prediction_list_callback(value);
+              var completion = predict(value, prediction_list);
+              if (completion !== false &&
+                  completion != element.data('last_completion')) {
+                  element.data('last_completion', completion);
+                  element.val(completion);
+                  element[0].selectionStart = value.length;
+                  element[0].selectionEnd = completion.length;
+              } else {
+                element.data('last_completion', '');
+              }
+          }
+      });
+  }
+          
+  function predict(start, list) {
+      for (var i = 0; i < list.length; i++) {
+          if (list[i].slice(0, start.length) == start) {
+              return list[i];
+          }
+      }
+      return false;
+  }
+
+  function add_row() {
+      var key = $('<input />').addClass('key');
+      var value = $('<input />').addClass('value');
+      
+      var li = $('<li />').addClass('new').append(key).append(value);
+      $('#fields').append(li);
+      bind_next_row(value);
+      add_submit_listener(key.add(value));
+      key.focus();
+      setup_completion(key, function() { return fields });
+      setup_completion(value, function() {
+          if (key.val() == 'subcategory') {
+              var subcategories = categories[$('#category').val()];
+              if (subcategories) {
+                  return subcategories
+              }
+          }
+          return [];
+      });
+  }
+
+%form{:method => 'POST', :action => '/add', :id => 'addform'}
+  %ul#fields
+    %li
+      %label.key{:for => 'name'} Name
+      %input.value#name{:name => 'name', :value => item.delete('name')}
+    %li
+      %label.key{:for => 'category'} Category
+      %input.value#category{:name => 'category', :value => item.delete('category')}
+    - item.each do |key, val|
+      - if key[0] == '_'
+        %input{:name => key, :value => val, :type => 'hidden'}
+      - else
+        %li
+          %input.key{:value => key}
+          %input.value{:name => key, :value => val}
+  %input{:type => 'button', :value => 'Submit', :onclick => 'submit_form();'}

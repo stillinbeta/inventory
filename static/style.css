@@ -1,0 +1,126 @@
+html {
+    height: 100%;
+}
+
+* { 
+    -moz-box-sizing: border-box; 
+    -webkit-box-sizing: border-box; 
+    box-sizing: border-box; 
+}
+
+body {
+    background: #1D1D1D url('/bg.png');
+    margin:  0;
+    padding: 0;
+    font-family: sans-serif;
+    height: 100%;
+}
+li {
+    list-style-type: none;
+}
+
+ul {
+    padding: 0;
+    margin: 0;
+}
+
+.categories {
+    font-size: 14pt;
+    background-color: #3E3F40;
+    float: left;
+    width: 250px;
+    margin: 10px 10px 0 0;
+    padding: 10px;
+    border-radius: 0 5px 5px 0;
+}
+
+.categories .actions {
+    padding-bottom: 5px;
+    margin-bottom: 5px; 
+    border-bottom: 2px solid #27F83F; 
+}
+
+.categories .actions a, .categories .actions a:visited {
+    color: #EEE;
+}
+
+.categories a, .categories a:visited {
+    color: #BBB;
+    text-decoration: none;
+    padding-left: 2px;
+    margin-left: 6px;
+}
+
+.categories a:hover, .categories li.selected > a{
+    color: #FFF;
+}
+
+.categories li a:hover {
+    border-left: 6px solid #27F83F;
+    margin-left: 0;
+}
+
+.categories li ul {
+    padding-left: 1em;
+}
+
+.content {
+    color: #222;
+    float: left; 
+    background-color: #A7A7A7;
+    min-width: 500px;
+    padding: 10px;
+    border-left: 6px solid #27F83F;
+    border-bottom-left-radius: 5px;
+}
+
+.content .key, .content label {
+    float: left;
+    clear: left;
+    width: 150px; 
+    margin-right: 5px;
+    text-align: right;
+}
+
+.content input.key {
+    text-align: left;
+}
+
+
+.content ul {
+    margin-bottom: 10px;
+}
+
+/* Buttons */
+.content input[type="button"], .content form{
+    float: left;
+    margin-right: 1em;
+}
+
+.content .items {
+    list-style-type: none;
+}
+
+.content .items li {
+    font-size: 12pt;
+    padding: 5px;
+}
+
+.content .items li.even {
+    background-color: #C3C3C3;
+}
+
+.content .items a, .content .items a:visited{
+    display: block;
+    color: #222;
+}
+
+.content .key {
+    font-weight: bold;
+}
+
+.content h1 {
+    margin: 0;
+}
+
+

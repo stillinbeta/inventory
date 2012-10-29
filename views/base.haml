@@ -1,0 +1,23 @@
+!!! 5
+%html
+  %head
+    %title=title
+    %script{:type => 'application/javascript', :src => '/jquery.js'}
+    %link{:type => 'text/css', :rel => 'stylesheet', :href => '/style.css'}
+  %body
+    .categories
+      %ul.actions
+        %li
+          %a{:href => '/add'} New Item &raquo;
+        %li
+          %a{:href => '/'}= "All (#{ categories.fetch(nil, '?')})"
+      %ul
+        - categories.each do |category, values| 
+          - next if not category
+          %li{:class => selected(category, selected_cat)}
+            =category_link category.to_s, values[:count]
+            - if values[:subcategories].length > 0
+              %ul
+                - values[:subcategories].each do |subcategory, count|
+                  %li{:class => selected(subcategory, selected_subcat)}=subcategory_link category, subcategory, count
+    .content=block.call
